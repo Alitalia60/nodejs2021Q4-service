@@ -1,24 +1,25 @@
-const express = require('express');
-const swaggerUI = require('swagger-ui-express');
-const path = require('path');
-const YAML = require('yamljs');
-const userRouter = require('./resources/users/user.router');
+const Koa = require('koa');
+const startServer = require('../src/server')
+const boardRouter = require("./resources/boards/board.router")
+const userRouter = require("./resources/users/user.router")
+const taskRouter = require("./resources/tasks/task.router")
+const koaBody = require('koa-body')
 
-const app = express();
-const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
+const app = new Koa();
+startServer(app);
 
-app.use(express.json());
+// app.use(koaBody());
+app.use(boardRouter.routes());
+app.use(boardRouter.allowedMethods())
 
-app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+app.use(userRouter.routes());
+app.use(userRouter.allowedMethods());
 
-app.use('/', (req, res, next) => {
-  if (req.originalUrl === '/') {
-    res.send('Service is running!');
-    return;
-  }
-  next();
-});
+app.use(taskRouter.routes());
+app.use(taskRouter.allowedMethods())
+app.on('error', err => {
+    // console.log('server error', err.message);
+    console.log('server error', err);
+})
 
-app.use('/users', userRouter);
 
-module.exports = app;
