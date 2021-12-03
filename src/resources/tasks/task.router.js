@@ -6,8 +6,7 @@ const { checkStructureTask } = require('../../common/checkStructure');
 const taskRouter = new Router();
 
 //Tasks-------------------------------
-//?
-// GET boards/:boardId/tasks
+//!!  1.  GET boards/:boardId/tasks
 taskRouter.get('/boards/:boardId/tasks', async (ctx, next) => {
   // console.log(ctx.params);
   ctx.set('content-type', 'application/json');
@@ -15,7 +14,7 @@ taskRouter.get('/boards/:boardId/tasks', async (ctx, next) => {
   next();
 });
 
-//TODO
+//!! 2. GET boards/:boardId/tasks/:taskId - get the task by id
 taskRouter.get(
   '/boards/:boardId/tasks/:taskId',
   koaBody(),
@@ -26,7 +25,7 @@ taskRouter.get(
   }
 );
 
-//!!
+//!!  3.  POST boards/:boardId/tasks - create task
 taskRouter.post('/boards/:boardId/tasks', koaBody(), async (ctx, next) => {
   if (!ctx.is('application/json')) {
     ctx.status = 400;
@@ -45,7 +44,7 @@ taskRouter.post('/boards/:boardId/tasks', koaBody(), async (ctx, next) => {
   ctx.status = 201;
 });
 
-//TODO
+//TODO 4. PUT boards/:boardId/tasks/:taskId - update task
 taskRouter.put(
   'boards/:boardId/tasks/:taskId',
   koaBody(),
@@ -67,7 +66,7 @@ taskRouter.put(
   }
 );
 
-//TODO
+//TODO 5.  DELETE boards/:boardId/tasks/:taskId - delete task
 taskRouter.del('boards/:boardId/tasks/:taskId', async (ctx, next) => {
   taskService.delTask(ctx);
   next();

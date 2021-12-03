@@ -1,15 +1,32 @@
-const dbBoards = require('./board.memory.repository');
+const Column = require('../columns/column.model');
+const dbColumns = require('../columns/column.memory.repository');
+const { dbBoards, getBoardById } = require('./board.memory.repository');
 const Board = require('./board.model');
 
-// USER
-
-function findBoardById(id) {
-  return dbBoards.find((item) => item.id == id);
+function addColumnsToBard(arrColumns, board) {
+  if (arrColumns.length != 0) {
+    board.columns = [];
+    // const arrColumns = [];
+    arrColumns.forEach((element) => {
+      board.columns.push(new Column(element));
+    });
+  }
 }
 
-//!!
+//!!   i'm here
+function updColumnsOfBard(arrColumns, board) {
+  if (arrColumns.length != 0) {
+    board.columns = [];
+    // const arrColumns = [];
+    arrColumns.forEach((element) => {
+      board.columns.push(new Column(element));
+    });
+  }
+}
+
+//*  OK
 exports.getBoard = function (ctx) {
-  let board = findBoardById(ctx.params.boardId);
+  let board = getBoardById(ctx.params.boardId);
   if (board) {
     ctx.body = JSON.stringify(board);
     ctx.status = 200;
@@ -19,15 +36,11 @@ exports.getBoard = function (ctx) {
   }
 };
 
-//!!
-exports.getBoardList = function (ctx) {
-  return JSON.stringify(dbBoards);
-};
-
-//!!
-exports.addBoard = function (param) {
+//* OK
+exports.addBoard = function (ctx) {
   try {
-    const newBoard = new Board(param);
+    const newBoard = new Board(ctx.request.body);
+    addColumnsToBard(ctx.request.body.columns);
     dbBoards.push(newBoard);
     return JSON.stringify(newBoard);
   } catch (error) {
@@ -38,11 +51,15 @@ exports.addBoard = function (param) {
   }
 };
 
-//TODO
+//* OK
 exports.updBoard = function (ctx) {
-  let board = findBoardById(ctx.params.boardId);
+  let board = getBoardById(ctx.params.boardId);
   if (board) {
     board.updateBoard(ctx.request.body);
+
+    //!!
+    console.log(board.columns);
+
     ctx.body = JSON.stringify(board);
     ctx.status = 200;
   } else {
@@ -51,9 +68,9 @@ exports.updBoard = function (ctx) {
   }
 };
 
-//TODO
+//* OK
 exports.delBoard = function (ctx) {
-  let board = findBoardById(ctx.params.boardId);
+  let board = getBoardById(ctx.params.boardId);
   if (board) {
     dbBoards.splice(dbBoards.indexOf(board), 1);
     ctx.body = `deleted boards id = ${ctx.params.boardId}`;

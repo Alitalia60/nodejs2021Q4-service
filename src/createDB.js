@@ -1,45 +1,50 @@
-const dbBoards = require('./resources/boards/board.memory.repository');
-const dbUsers = require('./resources/users/user.memory.repository');
+const { dbBoards } = require('./resources/boards/board.memory.repository');
+const Board = require('./resources/boards/board.model');
+const { dbUsers } = require('./resources/users/user.memory.repository');
+const User = require('./resources/users/user.model');
 
 const boards = [
   {
     id: '3769ae78-b5e0-4225-bd95-66943b8e6325',
-    title: 'Board 1',
-    columns: 0,
+    title: 'Autotest board',
+    columns: [
+      { title: 'Backlog', order: 1 },
+      { title: 'Sprint', order: 2 },
+    ],
   },
   {
     id: '4dd1c8bf-747b-436c-bad3-ce64ad2348a4',
     title: 'Board 2',
-    columns: 0,
+    columns: [],
   },
   {
     id: '1e3cfb9b-ab55-4102-a8b3-d9c476eaa129',
     title: 'Board 3',
-    columns: 0,
+    columns: [],
   },
   {
     id: 'f48e4939-a097-4d7f-bb09-0dd7eff58cf0',
     title: 'Board 4',
-    columns: 0,
+    columns: [],
   },
   {
     id: '5f5b556b-db38-4fa7-8355-b3e7cb2f93e1',
     title: 'Board 5',
-    columns: 0,
+    columns: [],
   },
   {
     id: '6031ec1f-97cc-4351-a94e-067c34fa4b60',
     title: 'Board 6',
-    columns: 0,
+    columns: [],
   },
 ];
 
 const users = [
   {
     id: '7f4ba373-5ba1-4753-a37d-4f81fb4610ae',
-    name: 'Andrew',
-    login: 'A12345',
-    password: 'werwew',
+    name: 'TEST_USER',
+    login: 'test_user',
+    password: 'T35t_P@55w0rd',
   },
   {
     id: 'ff8904b0-7768-4acb-9fc3-44d24cf62810',
@@ -68,8 +73,8 @@ const users = [
 ];
 
 for (const item of users) {
-  dbUsers.push(item);
+  dbUsers.push(new User(item));
 }
 for (const item of boards) {
-  dbBoards.push(item);
+  dbBoards.push(new Board(item));
 }

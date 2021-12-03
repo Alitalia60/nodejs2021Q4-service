@@ -8,7 +8,6 @@ const koaBody = require('koa-body');
 const app = new Koa();
 startServer(app);
 
-// app.use(koaBody());
 app.use(boardRouter.routes());
 app.use(boardRouter.allowedMethods());
 

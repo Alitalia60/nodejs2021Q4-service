@@ -2,25 +2,27 @@ const koaBody = require('koa-body');
 const Router = require('koa-router');
 const { checkStructureBoard } = require('../../common/checkStructure');
 const boardService = require('./board.service');
+const { getBoardList } = require('./board.memory.repository');
 
 const boardRouter = new Router();
 
 //Boards-------------------------------
-//?
+//*  OK  1. GET /boards - get all boards
 boardRouter.get('/boards', async (ctx, next) => {
   ctx.set('content-type', 'application/json');
-  ctx.body = boardService.getBoardList(ctx);
+  ctx.body = JSON.stringify(getBoardList());
   next();
 });
 
-//TODO
+//* OK 2. GET /boards/:boardId - get the board by id
 boardRouter.get('/boards/:boardId', koaBody(), async (ctx, next) => {
   ctx.set('content-type', 'application/json');
   boardService.getBoard(ctx);
   next();
 });
 
-//!!
+//!!  3. POST /boards - create board
+//TODO  add columns if passed
 boardRouter.post('/boards', koaBody(), async (ctx, next) => {
   if (!ctx.is('application/json')) {
     ctx.status = 400;
@@ -34,12 +36,13 @@ boardRouter.post('/boards', koaBody(), async (ctx, next) => {
     ctx.response.body = 'structure of Board not valid';
     return;
   }
-  ctx.response.body = boardService.addBoard(ctx.request.body);
+  // ctx.response.body = boardService.addBoard(ctx.request.body);
+  ctx.response.body = boardService.addBoard(ctx);
   ctx.set('content-type', 'application/json');
   ctx.status = 201;
 });
 
-//TODO
+//!!  4.  PUT /boards/:boardId - update board
 boardRouter.put('/boards/:boardId', koaBody(), async (ctx, next) => {
   if (!ctx.is('application/json')) {
     ctx.status = 400;
@@ -57,7 +60,7 @@ boardRouter.put('/boards/:boardId', koaBody(), async (ctx, next) => {
   next();
 });
 
-//TODO
+//!!  DELETE /boards/:boardId - delete board
 boardRouter.del('/boards/:boardId', async (ctx, next) => {
   boardService.delBoard(ctx);
   next();

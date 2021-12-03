@@ -1,7 +1,13 @@
 const { v4: uuidv4 } = require('uuid');
 
 module.exports = class Board {
-  constructor({ title = 'NEW BOARD', columns = 0 } = {}) {
+  constructor({
+    title = 'Autotest board',
+    columns = [
+      { title: 'Backlog', order: 1 },
+      { title: 'Sprint', order: 2 },
+    ],
+  } = {}) {
     this.id = uuidv4();
     this.title = title;
     this.columns = columns;
