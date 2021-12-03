@@ -1,5 +1,11 @@
 const Router = require('koa-router');
-const taskService = require('./task.service');
+const {
+  getTask,
+  getTaskList,
+  addTask,
+  updTask,
+  delTask,
+} = require('./task.service');
 const koaBody = require('koa-body');
 const { checkStructureTask } = require('../../common/checkStructure');
 
@@ -10,7 +16,7 @@ const taskRouter = new Router();
 taskRouter.get('/boards/:boardId/tasks', async (ctx, next) => {
   // console.log(ctx.params);
   ctx.set('content-type', 'application/json');
-  ctx.body = taskService.getTaskList(ctx);
+  getTaskList(ctx);
   next();
 });
 
@@ -20,7 +26,7 @@ taskRouter.get(
   koaBody(),
   async (ctx, next) => {
     ctx.set('content-type', 'application/json');
-    taskService.getTask(ctx);
+    getTask(ctx);
     next();
   }
 );
@@ -36,10 +42,10 @@ taskRouter.post('/boards/:boardId/tasks', koaBody(), async (ctx, next) => {
   if (!checkStructureTask(ctx.request.body)) {
     // ctx.throw(400, "structure of Task not valid");
     ctx.status = 400;
-    ctx.response.body = 'structure of Task not valid';
+    ctx.response.body = 'incorrect structure of Task';
     return;
   }
-  ctx.response.body = taskService.addTask(ctx);
+  ctx.response.body = addTask(ctx);
   ctx.set('content-type', 'application/json');
   ctx.status = 201;
 });
@@ -56,12 +62,12 @@ taskRouter.put(
     }
     if (!checkStructureTask(ctx.request.body)) {
       ctx.status = 400;
-      ctx.response.body = 'structure of Task not valid';
+      ctx.response.body = 'incorrect structure of Task';
       return;
     }
-    taskService.updTask(ctx);
+    updTask(ctx);
     ctx.set('content-type', 'application/json');
-    //   ctx.response.status = 204;
+    ctx.response.status = 200;
     next();
   }
 );
@@ -72,7 +78,7 @@ taskRouter.del(
   koaBody(),
   async (ctx, next) => {
     ctx.set('content-type', 'application/json');
-    taskService.delTask(ctx);
+    delTask(ctx);
     next();
   }
 );

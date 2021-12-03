@@ -1,8 +1,14 @@
 const koaBody = require('koa-body');
 const Router = require('koa-router');
 const { checkStructureBoard } = require('../../common/checkStructure');
-const boardService = require('./board.service');
-const { getBoardList } = require('./board.memory.repository');
+const {
+  getBoard,
+  getBoardById,
+  getBoardList,
+  addBoard,
+  updBoard,
+  delBoard,
+} = require('./board.service');
 
 const boardRouter = new Router();
 
@@ -10,14 +16,14 @@ const boardRouter = new Router();
 //*  OK  1. GET /boards - get all boards
 boardRouter.get('/boards', async (ctx, next) => {
   ctx.set('content-type', 'application/json');
-  ctx.body = JSON.stringify(boardService.getBoardList());
+  ctx.body = JSON.stringify(getBoardList());
   next();
 });
 
 //* OK 2. GET /boards/:boardId - get the board by id
 boardRouter.get('/boards/:boardId', koaBody(), async (ctx, next) => {
   ctx.set('content-type', 'application/json');
-  boardService.getBoard(ctx);
+  getBoard(ctx);
   next();
 });
 
@@ -32,11 +38,11 @@ boardRouter.post('/boards', koaBody(), async (ctx, next) => {
   if (!checkStructureBoard(ctx.request.body)) {
     // ctx.throw(400, "structure of Board not valid");
     ctx.status = 400;
-    ctx.response.body = 'structure of Board not valid';
+    ctx.response.body = 'Incorrect structure of Board';
     return;
   }
-  // ctx.response.body = boardService.addBoard(ctx.request.body);
-  ctx.response.body = boardService.addBoard(ctx);
+  // ctx.response.body =  addBoard(ctx.request.body);
+  ctx.response.body = addBoard(ctx);
   ctx.set('content-type', 'application/json');
   ctx.status = 201;
 });
@@ -50,18 +56,18 @@ boardRouter.put('/boards/:boardId', koaBody(), async (ctx, next) => {
   }
   if (!checkStructureBoard(ctx.request.body)) {
     ctx.status = 400;
-    ctx.response.body = 'structure of Board not valid';
+    ctx.response.body = 'Incorrect structure of Board';
     return;
   }
-  boardService.updBoard(ctx);
+  updBoard(ctx);
   ctx.set('content-type', 'application/json');
-  //   ctx.response.status = 204;
+  ctx.response.status = 200;
   next();
 });
 
 //*  OK  DELETE /boards/:boardId - delete board
 boardRouter.del('/boards/:boardId', async (ctx, next) => {
-  boardService.delBoard(ctx);
+  delBoard(ctx);
   next();
 });
 
