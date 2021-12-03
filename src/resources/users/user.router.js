@@ -2,7 +2,6 @@ const Router = require('koa-router');
 const koaBody = require('koa-body');
 const { checkStructureUser } = require('../../common/checkStructure');
 const userService = require('./user.service');
-const { showUserList } = require('./user.memory.repository');
 
 const userRouter = new Router();
 
@@ -10,14 +9,14 @@ const userRouter = new Router();
 //* OK 1.  GET /users - get all users (remove password from response)
 userRouter.get('/users', async (ctx, next) => {
   ctx.set('content-type', 'application/json');
-  ctx.body = JSON.stringify(showUserList());
+  ctx.body = JSON.stringify(userService.showUserList());
   next();
 });
 
 //* OK GET /users/:userId - get the user by id (ex. “/users/123”) (remove password from response)
 userRouter.get('/users/:userId', koaBody(), async (ctx, next) => {
   ctx.set('content-type', 'application/json');
-  userService.getUser(ctx);
+  userService.getUserById(ctx);
   next();
 });
 

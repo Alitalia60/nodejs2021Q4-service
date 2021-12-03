@@ -6,7 +6,7 @@ const { checkStructureTask } = require('../../common/checkStructure');
 const taskRouter = new Router();
 
 //Tasks-------------------------------
-//!!  1.  GET boards/:boardId/tasks
+//*  OK  1.  GET boards/:boardId/tasks
 taskRouter.get('/boards/:boardId/tasks', async (ctx, next) => {
   // console.log(ctx.params);
   ctx.set('content-type', 'application/json');
@@ -14,7 +14,7 @@ taskRouter.get('/boards/:boardId/tasks', async (ctx, next) => {
   next();
 });
 
-//!! 2. GET boards/:boardId/tasks/:taskId - get the task by id
+//*  OK 2. GET boards/:boardId/tasks/:taskId - get the task by id
 taskRouter.get(
   '/boards/:boardId/tasks/:taskId',
   koaBody(),
@@ -25,7 +25,7 @@ taskRouter.get(
   }
 );
 
-//!!  3.  POST boards/:boardId/tasks - create task
+//* OK  3.  POST boards/:boardId/tasks - create task
 taskRouter.post('/boards/:boardId/tasks', koaBody(), async (ctx, next) => {
   if (!ctx.is('application/json')) {
     ctx.status = 400;
@@ -44,9 +44,9 @@ taskRouter.post('/boards/:boardId/tasks', koaBody(), async (ctx, next) => {
   ctx.status = 201;
 });
 
-//TODO 4. PUT boards/:boardId/tasks/:taskId - update task
+//*  OK  4. PUT /boards/:boardId/tasks/:taskId - update task
 taskRouter.put(
-  'boards/:boardId/tasks/:taskId',
+  '/boards/:boardId/tasks/:taskId',
   koaBody(),
   async (ctx, next) => {
     if (!ctx.is('application/json')) {
@@ -66,10 +66,15 @@ taskRouter.put(
   }
 );
 
-//TODO 5.  DELETE boards/:boardId/tasks/:taskId - delete task
-taskRouter.del('boards/:boardId/tasks/:taskId', async (ctx, next) => {
-  taskService.delTask(ctx);
-  next();
-});
+//* OK 5.  DELETE boards/:boardId/tasks/:taskId - delete task
+taskRouter.del(
+  '/boards/:boardId/tasks/:taskId',
+  koaBody(),
+  async (ctx, next) => {
+    ctx.set('content-type', 'application/json');
+    taskService.delTask(ctx);
+    next();
+  }
+);
 
 module.exports = taskRouter;

@@ -10,7 +10,7 @@ const boardRouter = new Router();
 //*  OK  1. GET /boards - get all boards
 boardRouter.get('/boards', async (ctx, next) => {
   ctx.set('content-type', 'application/json');
-  ctx.body = JSON.stringify(getBoardList());
+  ctx.body = JSON.stringify(boardService.getBoardList());
   next();
 });
 
@@ -21,8 +21,7 @@ boardRouter.get('/boards/:boardId', koaBody(), async (ctx, next) => {
   next();
 });
 
-//!!  3. POST /boards - create board
-//TODO  add columns if passed
+//* OK  3. POST /boards - create board
 boardRouter.post('/boards', koaBody(), async (ctx, next) => {
   if (!ctx.is('application/json')) {
     ctx.status = 400;
@@ -42,7 +41,7 @@ boardRouter.post('/boards', koaBody(), async (ctx, next) => {
   ctx.status = 201;
 });
 
-//!!  4.  PUT /boards/:boardId - update board
+//*  OK  4. PUT /boards/:boardId - update board
 boardRouter.put('/boards/:boardId', koaBody(), async (ctx, next) => {
   if (!ctx.is('application/json')) {
     ctx.status = 400;
@@ -60,7 +59,7 @@ boardRouter.put('/boards/:boardId', koaBody(), async (ctx, next) => {
   next();
 });
 
-//!!  DELETE /boards/:boardId - delete board
+//*  OK  DELETE /boards/:boardId - delete board
 boardRouter.del('/boards/:boardId', async (ctx, next) => {
   boardService.delBoard(ctx);
   next();

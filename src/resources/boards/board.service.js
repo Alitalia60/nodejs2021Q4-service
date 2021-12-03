@@ -1,31 +1,19 @@
 const Column = require('../columns/column.model');
 const dbColumns = require('../columns/column.memory.repository');
-const { dbBoards, getBoardById } = require('./board.memory.repository');
+const dbBoards = require('./board.memory.repository');
 const Board = require('./board.model');
+// const { updColumnsOfBoard } = require('../columns/column.service');
 
-function addColumnsToBard(arrColumns, board) {
-  if (arrColumns.length != 0) {
-    board.columns = [];
-    // const arrColumns = [];
-    arrColumns.forEach((element) => {
-      board.columns.push(new Column(element));
-    });
-  }
+function getBoardList() {
+  return dbBoards;
 }
 
-//!!   i'm here
-function updColumnsOfBard(arrColumns, board) {
-  if (arrColumns.length != 0) {
-    board.columns = [];
-    // const arrColumns = [];
-    arrColumns.forEach((element) => {
-      board.columns.push(new Column(element));
-    });
-  }
+function getBoardById(id) {
+  return dbBoards.find((item) => item.id == id);
 }
 
 //*  OK
-exports.getBoard = function (ctx) {
+function getBoard(ctx) {
   let board = getBoardById(ctx.params.boardId);
   if (board) {
     ctx.body = JSON.stringify(board);
@@ -34,13 +22,13 @@ exports.getBoard = function (ctx) {
     ctx.body = JSON.stringify(`not found board ${ctx.params.boardId}`);
     ctx.status = 404;
   }
-};
+}
 
 //* OK
-exports.addBoard = function (ctx) {
+function addBoard(ctx) {
   try {
     const newBoard = new Board(ctx.request.body);
-    addColumnsToBard(ctx.request.body.columns);
+    // updColumnsOfBoard(ctx.request.body.columns, newBoard);
     dbBoards.push(newBoard);
     return JSON.stringify(newBoard);
   } catch (error) {
@@ -49,27 +37,30 @@ exports.addBoard = function (ctx) {
 
     console.log(`error creating Board`, error);
   }
-};
+
+  console.log('Add -> array Boards =', dbBoards.length);
+}
 
 //* OK
-exports.updBoard = function (ctx) {
+function updBoard(ctx) {
+  // console.log('Befor upd-> array Boards =', dbBoards.length);
   let board = getBoardById(ctx.params.boardId);
   if (board) {
+    // console.log(' updBoard ', ctx.params);
+
     board.updateBoard(ctx.request.body);
-
-    //!!
-    console.log(board.columns);
-
+    // updColumnsOfBoard(ctx.request.body.columns, newBoard);
     ctx.body = JSON.stringify(board);
     ctx.status = 200;
   } else {
     ctx.body = JSON.stringify(`not found board ${ctx.params.boardId}`);
     ctx.status = 404;
   }
-};
+  // console.log('After upd-> array Boards =', dbBoards.length);
+}
 
 //* OK
-exports.delBoard = function (ctx) {
+function delBoard(ctx) {
   let board = getBoardById(ctx.params.boardId);
   if (board) {
     dbBoards.splice(dbBoards.indexOf(board), 1);
@@ -78,4 +69,13 @@ exports.delBoard = function (ctx) {
     ctx.body = JSON.stringify(`not found board ${ctx.params.boardId}`);
     ctx.status = 404;
   }
+}
+
+module.exports = {
+  getBoard,
+  getBoardById,
+  getBoardList,
+  addBoard,
+  updBoard,
+  delBoard,
 };

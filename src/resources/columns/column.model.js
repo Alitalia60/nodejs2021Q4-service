@@ -8,6 +8,10 @@ module.exports = class Column {
     this.order = order;
   }
 
+  updateColumn({ title, order }) {
+    this.title = title;
+    this.order = order;
+  }
   static toResponse(column) {
     const { id, title, columns } = column;
     return { id, title, columns };

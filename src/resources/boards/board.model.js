@@ -1,4 +1,6 @@
 const { v4: uuidv4 } = require('uuid');
+const dbColumns = require('../columns/column.memory.repository');
+const Column = require('../columns/column.model');
 
 module.exports = class Board {
   constructor({
@@ -15,8 +17,24 @@ module.exports = class Board {
 
   updateBoard({ title, columns }) {
     this.title = title;
-    this.columns = columns;
+
+    //udate columns
+    if (columns.length != 0) {
+      columns.forEach((element) => {
+        let newColumn = dbColumns.find((item) => item.id == element.id);
+        if (!newColumn) {
+          newColumn = new Column(element);
+          // console.log('create', newColumn.id);
+          dbColumns.push(newColumn);
+          this.columns.push(newColumn);
+        } else {
+          // console.log('find & update', element.id);
+          newColumn.updateColumn(element);
+        }
+      });
+    }
   }
+
   static toResponse(board) {
     const { id, title, columns } = board;
     return { id, title, columns };

@@ -1,14 +1,28 @@
-const {
-  dbUsers,
-  showUser,
-  getUserById,
-  showUserList,
-} = require('./user.memory.repository');
+const dbUsers = require('./user.memory.repository');
 const User = require('./user.model');
 
+// get all users (remove password from response)
+function showUserList() {
+  return dbUsers.map((item) => {
+    delete item['password'];
+    return item;
+  });
+}
+
+// return representation of user without password
+function showUser(user) {
+  delete user['password'];
+  return user;
+}
+
+// return object of User
+function getUserObject(id) {
+  return dbUsers.find((item) => item.id == id);
+}
+
 //* OK
-exports.getUser = function (ctx) {
-  let user = getUserById(ctx.params.userId);
+function getUserById(ctx) {
+  let user = getUserObject(ctx.params.userId);
   if (user) {
     ctx.body = JSON.stringify(showUser(user));
     ctx.status = 200;
@@ -16,15 +30,10 @@ exports.getUser = function (ctx) {
     ctx.body = JSON.stringify(`not found user ${ctx.params.userId}`);
     ctx.status = 404;
   }
-};
+}
 
 //* OK
-exports.getUserList = function () {
-  return showUserList();
-};
-
-//* OK
-exports.addUser = function (ctxReqBody) {
+function addUser(ctxReqBody) {
   try {
     const newUser = new User(ctxReqBody);
     dbUsers.push(newUser);
@@ -35,11 +44,11 @@ exports.addUser = function (ctxReqBody) {
 
     console.log(`error creating User`, error);
   }
-};
+}
 
 //* OK
-exports.updUser = function (ctx) {
-  let user = getUserById(ctx.params.userId);
+function updUser(ctx) {
+  let user = getUserObject(ctx.params.userId);
   if (user) {
     user.updateUser(ctx.request.body);
     ctx.body = JSON.stringify(showUser(user));
@@ -48,11 +57,11 @@ exports.updUser = function (ctx) {
     ctx.body = JSON.stringify(`not found user ${ctx.params.userId}`);
     ctx.status = 404;
   }
-};
+}
 
 //* OK
-exports.delUser = function (ctx) {
-  let user = getUserById(ctx.params.userId);
+function delUser(ctx) {
+  let user = getUserObject(ctx.params.userId);
   if (user) {
     dbUsers.splice(dbUsers.indexOf(user), 1);
     ctx.body = `deleted users id = ${ctx.params.userId}`;
@@ -60,4 +69,14 @@ exports.delUser = function (ctx) {
     ctx.body = JSON.stringify(`not found user ${ctx.params.userId}`);
     ctx.status = 404;
   }
+}
+
+module.exports = {
+  getUserById,
+  showUserList,
+  showUser,
+  delUser,
+  addUser,
+  updUser,
+  delUser,
 };
