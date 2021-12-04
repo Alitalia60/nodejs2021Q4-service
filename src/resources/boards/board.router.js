@@ -1,6 +1,8 @@
 const koaBody = require('koa-body');
 const Router = require('koa-router');
-const { checkStructureBoard } = require('../../common/checkStructure');
+// const { checkStructureBoard } = require('../../common/checkStructure');
+const checkRequestStructure = require('../../common/checkStructure');
+const Board = require('./board.model');
 const {
   getBoard,
   getBoardById,
@@ -32,16 +34,14 @@ boardRouter.post('/boards', koaBody(), async (ctx, next) => {
   if (!ctx.is('application/json')) {
     ctx.status = 400;
     ctx.response.body = "not 'application/json";
-    // ctx.throw(400, "not 'application/json");
     return;
   }
-  if (!checkStructureBoard(ctx.request.body)) {
+  if (!checkRequestStructure(ctx.request.body, new Board())) {
     // ctx.throw(400, "structure of Board not valid");
     ctx.status = 400;
     ctx.response.body = 'Incorrect structure of Board';
     return;
   }
-  // ctx.response.body =  addBoard(ctx.request.body);
   ctx.response.body = addBoard(ctx);
   ctx.set('content-type', 'application/json');
   ctx.status = 201;
@@ -54,7 +54,7 @@ boardRouter.put('/boards/:boardId', koaBody(), async (ctx, next) => {
     ctx.response.body = "not 'application/json";
     return;
   }
-  if (!checkStructureBoard(ctx.request.body)) {
+  if (!checkRequestStructure(ctx.request.body, new Board())) {
     ctx.status = 400;
     ctx.response.body = 'Incorrect structure of Board';
     return;

@@ -1,6 +1,7 @@
 const Router = require('koa-router');
+const User = require('./user.model');
 const koaBody = require('koa-body');
-const { checkStructureUser } = require('../../common/checkStructure');
+const checkRequestStructure = require('../../common/checkStructure');
 const {
   getUserById,
   showUserList,
@@ -36,7 +37,8 @@ userRouter.post('/users', koaBody(), async (ctx, next) => {
     // ctx.throw(400, "not 'application/json");
     return;
   }
-  if (!checkStructureUser(ctx.request.body)) {
+  if (!checkRequestStructure(ctx.request.body, new User())) {
+    // if (!checkStructureUser(ctx.request.body)) {
     ctx.status = 400;
     ctx.response.body = 'structure of User not valid';
     return;
@@ -55,7 +57,8 @@ userRouter.put('/users/:userId', koaBody(), async (ctx, next) => {
     ctx.response.body = "not 'application/json";
     return;
   }
-  if (!checkStructureUser(ctx.request.body)) {
+  if (!checkRequestStructure(ctx.request.body, new User())) {
+    // if (!checkStructureUser(ctx.request.body)) {
     ctx.response.status = 400;
     ctx.response.body = 'structure of User not valid';
     return;

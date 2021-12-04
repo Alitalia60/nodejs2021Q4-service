@@ -53,12 +53,8 @@ function addUser(ctxReqBody) {
 function updUser(ctx) {
   let user = getUserObject(ctx.params.userId);
   if (user) {
-    // ctx.set('Content-type', 'application/json');
     user.updateUser(ctx.request.body);
-
-    console.log(ctx.type);
   } else {
-    // ctx.response.set('Content-type', 'application/json');
     ctx.body = JSON.stringify(`not found user ${ctx.params.userId}`);
     ctx.status = 404;
   }
@@ -67,16 +63,12 @@ function updUser(ctx) {
 //* OK
 function delUser(ctx) {
   let userId = ctx.params.userId;
-  // console.log(`before deleting usew=${userId}`);
-  // console.log('dbTasks=', dbTasks);
 
   let user = getUserObject(ctx.params.userId);
   if (user) {
-    //TODO  userID of Tasks must tobe null
-
     dbTasks.forEach((element) => {
       if ((element.userId = userId)) {
-        console.log(`delete TASK ${element} userId ${userId} = null`);
+        // console.log(`delete TASK ${element} userId ${userId} = null`);
         element.userId = null;
       }
     });
@@ -84,9 +76,6 @@ function delUser(ctx) {
     dbUsers.splice(dbUsers.indexOf(user), 1);
     ctx.response.status = 200;
     ctx.body = `deleted users id = ${userId}`;
-
-    // console.log(`AFTER deleting usew=${userId}`);
-    // console.log('dbTasks=', dbTasks);
   } else {
     ctx.body = JSON.stringify(`not found user ${userId}`);
     ctx.response.status = 404;

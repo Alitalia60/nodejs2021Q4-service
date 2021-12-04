@@ -1,3 +1,4 @@
+const Task = require('./task.model');
 const Router = require('koa-router');
 const {
   getTask,
@@ -7,14 +8,13 @@ const {
   delTask,
 } = require('./task.service');
 const koaBody = require('koa-body');
-const { checkStructureTask } = require('../../common/checkStructure');
+const checkRequestStructure = require('../../common/checkStructure');
 
 const taskRouter = new Router();
 
 //Tasks-------------------------------
 //*  OK  1.  GET boards/:boardId/tasks
 taskRouter.get('/boards/:boardId/tasks', async (ctx, next) => {
-  // console.log(ctx.params);
   ctx.set('content-type', 'application/json');
   getTaskList(ctx);
   next();
@@ -39,17 +39,14 @@ taskRouter.post('/boards/:boardId/tasks', koaBody(), async (ctx, next) => {
     // ctx.throw(400, "not 'application/json");
     return;
   }
-  if (!checkStructureTask(ctx.request.body)) {
-    // ctx.throw(400, "structure of Task not valid");
+  if (!checkRequestStructure(ctx.request.body, new Task())) {
+    console.log('creatung TASK structure of Task not valid');
     ctx.status = 400;
     ctx.response.body = 'incorrect structure of Task';
     return;
   }
   ctx.set('content-type', 'application/json');
   ctx.response.body = addTask(ctx);
-  //!!
-  // console.log(`created task \n`, ctx.response.body);
-
   ctx.status = 201;
 });
 
@@ -63,7 +60,7 @@ taskRouter.put(
       ctx.response.body = "not 'application/json";
       return;
     }
-    if (!checkStructureTask(ctx.request.body)) {
+    if (!checkRequestStructure(ctx.request.body, new Task())) {
       ctx.status = 400;
       ctx.response.body = 'incorrect structure of Task';
       return;

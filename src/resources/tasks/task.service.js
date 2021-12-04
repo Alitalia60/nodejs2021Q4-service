@@ -36,7 +36,6 @@ function getTaskList(ctx) {
   const boardId = ctx.params.boardId;
   let board = getBoardById(boardId);
   if (!board) {
-    // console.log(`Not found board ${boardId}`);
     ctx.body = JSON.stringify(`Not found board ${boardId}`);
     ctx.status = 404;
     return;
@@ -72,7 +71,6 @@ function updTask(ctx) {
   const boardId = ctx.params.boardId;
   let board = getBoardById(boardId);
   if (!board) {
-    // console.log(`Not found board ${boardId}`);
     ctx.body = JSON.stringify(`Not found board ${boardId}`);
     ctx.status = 404;
     return;
@@ -106,17 +104,11 @@ function delTask(ctx) {
 }
 
 function deleteTasksIfBoardId(boardId) {
-  // console.log('before');
-  // console.log('dbTask=s', dbTasks);
   let findedTaskIndex;
   do {
     findedTaskIndex = dbTasks.findIndex((item) => dbTasks.boardId == boardId);
     dbTasks.splice(findedTaskIndex);
   } while (findedTaskIndex != -1);
-
-  //after
-  // console.log('after');
-  // console.log('dbTask=s', dbTasks);
 }
 
 module.exports = {

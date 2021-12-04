@@ -39,8 +39,6 @@ function addBoard(ctx) {
 
     console.log(`error creating Board`, error);
   }
-
-  console.log('Add -> array Boards =', dbBoards.length);
 }
 
 //* OK
@@ -63,14 +61,11 @@ function delBoard(ctx) {
   let boardId = ctx.params.boardId;
   let board = getBoardById(boardId);
   if (board) {
-    //!! check
     // delete all tasks from dbTasks where task.boardId == board.id
     deleteTasksIfBoardId(boardId);
     deleteColumnsOfBoardId(boardId);
     dbBoards.splice(dbBoards.indexOf(board), 1);
     ctx.body = `deleted boards id = ${boardId}`;
-
-    //!! *****
   } else {
     ctx.body = JSON.stringify(`not found board ${boardId}`);
     ctx.status = 404;

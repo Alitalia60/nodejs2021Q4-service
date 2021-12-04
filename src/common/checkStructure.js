@@ -1,61 +1,13 @@
-const User = require('../resources/users/user.model')
-const Board = require('../resources/boards/board.model')
-const Task = require('../resources/tasks/task.model')
-const Column = require('../resources/columns/column.model');
+module.exports = function checkRequestStructure(param, instanceOfClass) {
+  let result = true;
+  const correctStructure = Object.keys(instanceOfClass);
+  const requestStructure = Object.keys(param);
 
-function checkStructureUser(param) {
-    let result = true;
-    let jsonParam = JSON.stringify(param);
-    Object.keys(new User()).forEach(key => {
-        if ((Object.keys(param).indexOf(key) == -1) && (key != 'id')) {
-            // console.log(key);
-            result = false
-        }
-    })
-    return result
-}
-
-function checkStructureBoard(param) {
-    let result = true;
-    let jsonParam = JSON.stringify(param);
-    Object.keys(new Board()).forEach(key => {
-        if ((Object.keys(param).indexOf(key) == -1) && (key != 'id')) {
-            result = false
-        }
-    })
-    return result
-}
-
-
-//TODO
-function checkStructureTask(param) {
-    let result = true;
-    let jsonParam = JSON.stringify(param);
-    Object.keys(new Task()).forEach(key => {
-        if ((Object.keys(param).indexOf(key) == -1) && (key != 'id')) {
-            // console.log(key);
-            result = false
-        }
-    })
-    return result
-}
-
-//TODO
-function checkStructureColumn(param) {
-    let result = true;
-    let jsonParam = JSON.stringify(param);
-    Object.keys(new Column()).forEach(key => {
-        if ((Object.keys(param).indexOf(key) == -1) && (key != 'id')) {
-            // console.log(key);
-            result = false
-        }
-    })
-    return result
-}
-
-module.exports = {
-    checkStructureUser,
-    checkStructureBoard,
-    checkStructureTask,
-    checkStructureColumn
-}
+  requestStructure.forEach((key) => {
+    if (correctStructure.indexOf(key) == -1) {
+      console.log('Task model: Incorrect key=', key);
+      result = false;
+    }
+  });
+  return result;
+};
