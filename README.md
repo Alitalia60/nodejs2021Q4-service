@@ -8,6 +8,7 @@
 ### Downloading
 
 git clone {repository URL}
+git checkout task3
 
 ### Installing NPM modules
 
