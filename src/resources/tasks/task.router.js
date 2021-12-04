@@ -45,8 +45,11 @@ taskRouter.post('/boards/:boardId/tasks', koaBody(), async (ctx, next) => {
     ctx.response.body = 'incorrect structure of Task';
     return;
   }
-  ctx.response.body = addTask(ctx);
   ctx.set('content-type', 'application/json');
+  ctx.response.body = addTask(ctx);
+  //!!
+  // console.log(`created task \n`, ctx.response.body);
+
   ctx.status = 201;
 });
 

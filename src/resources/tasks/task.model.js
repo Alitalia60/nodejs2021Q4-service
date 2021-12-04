@@ -2,7 +2,6 @@ const { v4: uuidv4 } = require('uuid');
 
 class Task {
   constructor({
-    id = uuidv4(),
     title = 'Autotest task',
     order = 0,
     description = 'Lorem ipsum',
@@ -10,7 +9,7 @@ class Task {
     boardId = null,
     columnId = null,
   } = {}) {
-    this.id = id;
+    this.id = uuidv4();
     this.title = title;
     this.order = order;
     this.description = description;

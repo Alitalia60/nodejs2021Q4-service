@@ -1,11 +1,12 @@
 const dotenv = require('dotenv');
-const { PORT } = require('./common/config');
+// const { PORT } = require('./common/config');
 
 const envParsed = dotenv.config().parsed;
 if (envParsed.error) {
   throw envParsed.error;
 }
 const HOST = envParsed.HOST || 'localhost';
+const PORT = envParsed.PORT || 4000;
 module.exports = function startServer(app) {
   app.listen(PORT, () => {
     console.log('==============================================');

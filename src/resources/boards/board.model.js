@@ -19,16 +19,15 @@ module.exports = class Board {
     this.title = title;
 
     //udate columns
+    this.columns = [];
     if (columns.length != 0) {
       columns.forEach((element) => {
         let newColumn = dbColumns.find((item) => item.id == element.id);
         if (!newColumn) {
           newColumn = new Column(element);
-          // console.log('create', newColumn.id);
           dbColumns.push(newColumn);
           this.columns.push(newColumn);
         } else {
-          // console.log('find & update', element.id);
           newColumn.updateColumn(element);
         }
       });

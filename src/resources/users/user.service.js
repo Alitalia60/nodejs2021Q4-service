@@ -67,8 +67,8 @@ function updUser(ctx) {
 //* OK
 function delUser(ctx) {
   let userId = ctx.params.userId;
-  console.log(`before deleting usew=${userId}`);
-  console.log('dbTasks=', dbTasks);
+  // console.log(`before deleting usew=${userId}`);
+  // console.log('dbTasks=', dbTasks);
 
   let user = getUserObject(ctx.params.userId);
   if (user) {
@@ -85,8 +85,8 @@ function delUser(ctx) {
     ctx.response.status = 200;
     ctx.body = `deleted users id = ${userId}`;
 
-    console.log(`AFTER deleting usew=${userId}`);
-    console.log('dbTasks=', dbTasks);
+    // console.log(`AFTER deleting usew=${userId}`);
+    // console.log('dbTasks=', dbTasks);
   } else {
     ctx.body = JSON.stringify(`not found user ${userId}`);
     ctx.response.status = 404;

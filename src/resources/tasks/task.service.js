@@ -58,12 +58,10 @@ function addTask(ctx) {
     }
     const newTask = new Task(ctx.request.body);
     dbTasks.push(newTask);
-    ctx.status = 201;
     return JSON.stringify(newTask);
   } catch (error) {
     ctx.body = JSON.stringify(`Error creating Task`);
     ctx.status = 500;
-    // console.log(`error creating Task`, error);
   }
 }
 

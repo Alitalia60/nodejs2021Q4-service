@@ -36,15 +36,15 @@ userRouter.post('/users', koaBody(), async (ctx, next) => {
     // ctx.throw(400, "not 'application/json");
     return;
   }
-  // if (!checkStructureUser(ctx.request.body)) {
-  //   ctx.status = 400;
-  //   ctx.response.body = 'structure of User not valid';
-  //   return;
-  // }
+  if (!checkStructureUser(ctx.request.body)) {
+    ctx.status = 400;
+    ctx.response.body = 'structure of User not valid';
+    return;
+  }
 
-  ctx.response.body = addUser(ctx.request.body);
-  ctx.response.set('Content-type', 'application/json');
   ctx.status = 201;
+  ctx.response.set('Content-type', 'application/json');
+  ctx.response.body = addUser(ctx.request.body);
 });
 
 //* OK PUT /users/:userId - update user

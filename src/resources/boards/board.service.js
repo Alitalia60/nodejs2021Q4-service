@@ -45,20 +45,17 @@ function addBoard(ctx) {
 
 //* OK
 function updBoard(ctx) {
-  // console.log('Befor upd-> array Boards =', dbBoards.length);
-  let board = getBoardById(ctx.params.boardId);
+  let boardId = ctx.params.boardId;
+  let board = getBoardById(boardId);
   if (board) {
-    // console.log(' updBoard ', ctx.params);
-
+    deleteColumnsOfBoardId(boardId);
     board.updateBoard(ctx.request.body);
-    // updColumnsOfBoard(ctx.request.body.columns, newBoard);
     ctx.body = JSON.stringify(board);
     ctx.status = 200;
   } else {
-    ctx.body = JSON.stringify(`not found board ${ctx.params.boardId}`);
+    ctx.body = JSON.stringify(`not found board ${boardId}`);
     ctx.status = 404;
   }
-  // console.log('After upd-> array Boards =', dbBoards.length);
 }
 
 //* OK
@@ -69,15 +66,7 @@ function delBoard(ctx) {
     //!! check
     // delete all tasks from dbTasks where task.boardId == board.id
     deleteTasksIfBoardId(boardId);
-
-    //TODO delete all columns and tasks
-    // delete all instances from dbColumns where column.id is in board.columns
-    // dbColumns = dbColumns.map(
-    // (item) => idOfColumnsOfBoard.indexOf(item.id) != -1
-    // );
-
-    // console.log(dbColumns);
-
+    deleteColumnsOfBoardId(boardId);
     dbBoards.splice(dbBoards.indexOf(board), 1);
     ctx.body = `deleted boards id = ${boardId}`;
 
@@ -85,6 +74,18 @@ function delBoard(ctx) {
   } else {
     ctx.body = JSON.stringify(`not found board ${boardId}`);
     ctx.status = 404;
+  }
+}
+
+function deleteColumnsOfBoardId(boardId) {
+  let board = getBoardById(boardId);
+  if (board.columns.length != 0) {
+    const arrayOfColumns = board.columns;
+    arrayOfColumns.forEach((element) => {
+      let columnOfBoard = dbColumns.find((el) => el.id == element.id);
+      dbColumns.splice(columnOfBoard);
+      element = {};
+    });
   }
 }
 
