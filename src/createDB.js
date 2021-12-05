@@ -1,9 +1,7 @@
-const  dbBoards  = require('./resources/boards/board.memory.repository');
+const dbBoards = require('./resources/boards/board.memory.repository');
 const Board = require('./resources/boards/board.model');
-const  dbUsers  = require('./resources/users/user.memory.repository');
+const dbUsers = require('./resources/users/user.memory.repository');
 const User = require('./resources/users/user.model');
-const  dbColumns  = require('./resources/users/user.memory.repository');
-const { updColumnsOfBoard } = require('./resources/columns/column.service');
 
 const boards = [
   {

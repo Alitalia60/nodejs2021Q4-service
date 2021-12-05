@@ -1,6 +1,7 @@
 const dbTasks = require('../tasks/task.memory.repository');
 const dbUsers = require('./user.memory.repository');
 const User = require('./user.model');
+const checkRequestStructure = require('../../common/checkStructure');
 
 // get all users (remove password from response)
 function showUserList() {
@@ -24,38 +25,68 @@ function getUserObject(id) {
 
 //* OK
 function getUserById(ctx) {
-  let user = getUserObject(ctx.params.userId);
+  let userId = ctx.params.userId;
+  let user = getUserObject(userId);
   if (user) {
     ctx.body = JSON.stringify(showUser(user));
     ctx.status = 200;
   } else {
-    ctx.body = JSON.stringify(`not found user ${ctx.params.userId}`);
+    ctx.body = JSON.stringify(`not found user ${userId}`);
     ctx.status = 404;
   }
 }
 
-//!! test
-function addUser(ctxReqBody) {
-  try {
-    const newUser = new User(ctxReqBody);
-    dbUsers.push(newUser);
-    // return JSON.stringify(newUser);
-    return JSON.stringify(showUser(newUser));
-  } catch (error) {
-    ctx.body = JSON.stringify(`error creating User`);
-    ctx.status = 500;
+//* OK
+function addUser(ctx) {
+  if (!ctx.is('application/json')) {
+    ctx.status = 400;
+    ctx.response.body = 'not application/json';
+    return;
+  }
 
+  if (!checkRequestStructure(ctx.request.body, new User())) {
+    ctx.status = 400;
+    ctx.response.body = 'structure of User not valid';
+    return;
+  }
+
+  try {
+    const newUser = new User(ctx.request.body);
+    dbUsers.push(newUser);
+    ctx.response.status = 201;
+    ctx.set('Content-type', 'application/json');
+    ctx.response.body = JSON.stringify(showUser(newUser));
+    // ctx.response.body = JSON.stringify(newUser);
+  } catch (error) {
+    ctx.responce.body = JSON.stringify(`error creating User`);
+    ctx.status = 500;
     console.log(`error creating User`, error);
   }
 }
 
 //* OK
 function updUser(ctx) {
-  let user = getUserObject(ctx.params.userId);
+  ctx.response.type = 'application/json';
+  if (!ctx.is('application/json')) {
+    ctx.response.status = 400;
+    ctx.response.body = 'not application/json';
+    return;
+  }
+  if (!checkRequestStructure(ctx.request.body, new User())) {
+    ctx.response.status = 400;
+    console.log('structure of User not valid');
+    ctx.response.body = 'structure of User not valid';
+    return;
+  }
+  let userId = ctx.params.userId;
+  let user = getUserObject(userId);
   if (user) {
     user.updateUser(ctx.request.body);
+    ctx.response.set('Content-type', 'application/json');
+    ctx.response.body = JSON.stringify(showUser(user));
+    ctx.response.status = 200;
   } else {
-    ctx.body = JSON.stringify(`not found user ${ctx.params.userId}`);
+    ctx.body = JSON.stringify(`not found user ${userId}`);
     ctx.status = 404;
   }
 }
@@ -63,19 +94,19 @@ function updUser(ctx) {
 //* OK
 function delUser(ctx) {
   let userId = ctx.params.userId;
-
-  let user = getUserObject(ctx.params.userId);
+  let user = getUserObject(userId);
   if (user) {
     dbTasks.forEach((element) => {
-      if ((element.userId = userId)) {
-        // console.log(`delete TASK ${element} userId ${userId} = null`);
+      if (element.userId == userId) {
+        console.log(`delete TASK ${element} userId ${userId} = null`);
         element.userId = null;
       }
     });
 
     dbUsers.splice(dbUsers.indexOf(user), 1);
-    ctx.response.status = 200;
     ctx.body = `deleted users id = ${userId}`;
+    ctx.response.status = 204;
+    ctx.response.set('Content-type', 'application/json');
   } else {
     ctx.body = JSON.stringify(`not found user ${userId}`);
     ctx.response.status = 404;
@@ -86,7 +117,6 @@ module.exports = {
   getUserById,
   showUserList,
   showUser,
-  delUser,
   addUser,
   updUser,
   delUser,

@@ -1,6 +1,7 @@
 const dbTasks = require('./task.memory.repository');
 const dbBoards = require('../boards/board.memory.repository');
 const Task = require('./task.model');
+const checkRequestStructure = require('../../common/checkStructure');
 
 function getBoardById(id) {
   return dbBoards.find((item) => item.id == id);
@@ -15,7 +16,6 @@ function getTask(ctx) {
   const boardId = ctx.params.boardId;
   let board = getBoardById(boardId);
   if (!board) {
-    // console.log(`Not found board ${boardId}`);
     ctx.body = JSON.stringify(`Not found board ${boardId}`);
     ctx.status = 404;
     return;
@@ -23,7 +23,8 @@ function getTask(ctx) {
   const taskId = ctx.params.taskId;
   const task = findTaskById(taskId);
   if (task) {
-    ctx.body = JSON.stringify(task);
+    ctx.response.set('content-type', 'application/json');
+    ctx.response.body = JSON.stringify(task);
     ctx.status = 200;
   } else {
     ctx.body = JSON.stringify(`Not found task ${taskId}`);
@@ -41,11 +42,24 @@ function getTaskList(ctx) {
     return;
   }
   ctx.status = 200;
+  ctx.response.set('content-type', 'application/json');
   ctx.body = JSON.stringify(dbTasks.filter((item) => item.boardId == boardId));
 }
 
 //* OK
 function addTask(ctx) {
+  if (!ctx.is('application/json')) {
+    ctx.status = 400;
+    ctx.response.body = "not 'application/json";
+    return;
+  }
+  if (!checkRequestStructure(ctx.request.body, new Task())) {
+    console.log('creatung TASK structure of Task not valid');
+    ctx.status = 400;
+    ctx.response.body = 'incorrect structure of Task';
+    return;
+  }
+
   const boardId = ctx.params.boardId;
   ctx.request.body.boardId = boardId;
   try {
@@ -57,7 +71,10 @@ function addTask(ctx) {
     }
     const newTask = new Task(ctx.request.body);
     dbTasks.push(newTask);
-    return JSON.stringify(newTask);
+    ctx.status = 201;
+    ctx.response.set('content-type', 'application/json');
+
+    ctx.response.body = JSON.stringify(newTask);
   } catch (error) {
     ctx.body = JSON.stringify(`Error creating Task`);
     ctx.status = 500;
@@ -66,8 +83,19 @@ function addTask(ctx) {
 
 //* OK
 function updTask(ctx) {
-  const taskId = ctx.params.taskId;
+  if (!ctx.is('application/json')) {
+    ctx.status = 400;
+    ctx.response.body = "not 'application/json";
+    return;
+  }
+  if (!checkRequestStructure(ctx.request.body, new Task())) {
+    console.log('creatung TASK structure of Task not valid');
+    ctx.status = 400;
+    ctx.response.body = 'incorrect structure of Task';
+    return;
+  }
 
+  const taskId = ctx.params.taskId;
   const boardId = ctx.params.boardId;
   let board = getBoardById(boardId);
   if (!board) {
@@ -81,8 +109,10 @@ function updTask(ctx) {
     //do not change boardID !!
     ctx.request.body.boardId = boardId;
     task.updateTask(ctx.request.body);
-    ctx.body = JSON.stringify(task);
-    ctx.status = 200;
+    ctx.set('content-type', 'application/json');
+    ctx.response.status = 200;
+
+    ctx.response.body = JSON.stringify(task);
   } else {
     ctx.body = JSON.stringify(`Not found task ${taskId}`);
     ctx.status = 404;
@@ -106,7 +136,7 @@ function delTask(ctx) {
 function deleteTasksIfBoardId(boardId) {
   let findedTaskIndex;
   do {
-    findedTaskIndex = dbTasks.findIndex((item) => dbTasks.boardId == boardId);
+    findedTaskIndex = dbTasks.findIndex((item) => item.boardId == boardId);
     dbTasks.splice(findedTaskIndex);
   } while (findedTaskIndex != -1);
 }
