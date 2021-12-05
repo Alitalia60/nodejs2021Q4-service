@@ -98,7 +98,6 @@ function delUser(ctx) {
   if (user) {
     dbTasks.forEach((element) => {
       if (element.userId == userId) {
-        console.log(`delete TASK ${element} userId ${userId} = null`);
         element.userId = null;
       }
     });
