@@ -9,7 +9,7 @@
 
 git clone {repository URL}
 
-git checkout task3
+git checkout task4
 
 ### Installing NPM modules
 
