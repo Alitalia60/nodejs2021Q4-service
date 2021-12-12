@@ -1,12 +1,12 @@
-const Router = require('koa-router');
-const {
+import Router from 'koa-router';
+import {
   getTask,
   getTaskList,
   addTask,
   updTask,
   delTask,
-} = require('./task.service');
-const koaBody = require('koa-body');
+} from './task.service';
+import koaBody from 'koa-body';
 
 const taskRouter = new Router();
 

@@ -1,18 +1,20 @@
-const dbTasks = require('./task.memory.repository');
-const dbBoards = require('../boards/board.memory.repository');
-const Task = require('./task.model');
-const checkRequestStructure = require('../../common/checkStructure');
+import { dbTasks } from './task.memory.repository';
+import { dbBoards } from '../boards/board.memory.repository';
+import { Task } from './task.model';
+import { checkRequestStructure } from '../../common/checkStructure';
+import { koaCtxType } from '../../common/types';
+import { updateTask } from './task.memory.repository';
 
-function getBoardById(id) {
+export function getBoardById(id: string) {
   return dbBoards.find((item) => item.id == id);
 }
 
-function findTaskById(id) {
+export function findTaskById(id: string) {
   return dbTasks.find((item) => item.id == id);
 }
 
 //* OK
-function getTask(ctx) {
+export function getTask(ctx: koaCtxType) {
   const boardId = ctx.params.boardId;
   let board = getBoardById(boardId);
   if (!board) {
@@ -33,7 +35,7 @@ function getTask(ctx) {
 }
 
 //* OK
-function getTaskList(ctx) {
+export function getTaskList(ctx: koaCtxType) {
   const boardId = ctx.params.boardId;
   let board = getBoardById(boardId);
   if (!board) {
@@ -47,7 +49,7 @@ function getTaskList(ctx) {
 }
 
 //* OK
-function addTask(ctx) {
+export function addTask(ctx: koaCtxType) {
   if (!ctx.is('application/json')) {
     ctx.status = 400;
     ctx.response.body = "not 'application/json";
@@ -82,7 +84,7 @@ function addTask(ctx) {
 }
 
 //* OK
-function updTask(ctx) {
+export function updTask(ctx: koaCtxType) {
   if (!ctx.is('application/json')) {
     ctx.status = 400;
     ctx.response.body = "not 'application/json";
@@ -108,7 +110,7 @@ function updTask(ctx) {
   if (task) {
     //do not change boardID !!
     ctx.request.body.boardId = boardId;
-    task.updateTask(ctx.request.body);
+    updateTask(task, ctx.request.body);
     ctx.set('content-type', 'application/json');
     ctx.response.status = 200;
 
@@ -119,8 +121,7 @@ function updTask(ctx) {
   }
 }
 
-//* OK
-function delTask(ctx) {
+export function delTask(ctx: koaCtxType) {
   const taskId = ctx.params.taskId;
   let task = findTaskById(taskId);
   if (task) {
@@ -133,20 +134,10 @@ function delTask(ctx) {
   }
 }
 
-function deleteTasksIfBoardId(boardId) {
+export function deleteTasksIfBoardId(boardId: string) {
   let findedTaskIndex;
   do {
     findedTaskIndex = dbTasks.findIndex((item) => item.boardId == boardId);
     dbTasks.splice(findedTaskIndex);
   } while (findedTaskIndex != -1);
 }
-
-module.exports = {
-  findTaskById,
-  getTask,
-  getTaskList,
-  updTask,
-  addTask,
-  delTask,
-  deleteTasksIfBoardId,
-};

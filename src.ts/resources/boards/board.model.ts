@@ -1,6 +1,6 @@
-const { v4: uuidv4 } = require('uuid');
-const dbColumns = require('../columns/column.memory.repository');
-const Column = require('../columns/column.model');
+import { v4 as uuidv4 } from 'uuid';
+import { dbColumns } from './board.memory.repository';
+import { Column } from '../columns/column.model';
 
 module.exports = class Board {
   constructor({

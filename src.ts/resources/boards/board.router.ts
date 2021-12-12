@@ -1,22 +1,20 @@
-const koaBody = require('koa-body');
-const Router = require('koa-router');
-const {
+import koaBody from 'koa-body';
+import Router from 'koa-router';
+
+import {
   getBoard,
   getBoardList,
   addBoard,
   updBoard,
   delBoard,
-} = require('./board.service');
+} from './board.service.ts';
 
-const boardRouter = new Router();
+export const boardRouter = new Router();
 
 //Boards-------------------------------
 //*  OK  1. GET /boards - get all boards
 boardRouter.get('/boards', async (ctx) => {
-  ctx.status = 200;
-  ctx.response.set('Content-type', 'application/json');
-
-  ctx.body = JSON.stringify(getBoardList());
+  getBoardList(ctx);
 });
 
 //* OK 2. GET /boards/:boardId - get the board by id
@@ -38,5 +36,3 @@ boardRouter.put('/boards/:boardId', koaBody(), async (ctx) => {
 boardRouter.del('/boards/:boardId', async (ctx) => {
   delBoard(ctx);
 });
-
-module.exports = boardRouter;

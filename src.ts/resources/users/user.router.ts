@@ -1,12 +1,13 @@
-const Router = require('koa-router');
-const koaBody = require('koa-body');
-const {
+import koaBody from 'koa-body';
+import Router from 'koa-router';
+
+import {
   getUserById,
   showUserList,
   delUser,
   addUser,
   updUser,
-} = require('./user.service');
+} from './user.service';
 
 const userRouter = new Router();
 
@@ -38,5 +39,3 @@ userRouter.put('/users/:userId', koaBody(), async (ctx) => {
 userRouter.del('/users/:userId', async (ctx) => {
   delUser(ctx);
 });
-
-module.exports = userRouter;
