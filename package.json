@@ -11,7 +11,7 @@
   "scripts": {
     "start:dev": "tsc && nodemon dist/src/app.js",
     "start:prod": "webpack --mode=production && nodemon ./dist/main.js",
-    "lint": "eslint --ext .js,.ts --fix src/",
+    "lint": "eslint --ext .js,.ts --fix dist/src/",
     "test": "cross-env DEBUG=rs:* jest --testMatch \"<rootDir>/test/e2e/test/*.test.js\" --noStackTrace --runInBand",
     "test:auth": "cross-env DEBUG=rs:* TEST_MODE=auth jest --noStackTrace"
   },
@@ -40,11 +40,12 @@
     }
   },
   "lint-staged": {
-    "src/**/*.js": [
+    "dist/**/*.js": [
       "npm run lint"
     ]
   },
   "dependencies": {
+    "@microsoft/tsdoc": "^0.13.2",
     "cross-env": "7.0.3",
     "dotenv": "10.0.0",
     "koa": "^2.13.4",

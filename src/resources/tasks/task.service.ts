@@ -2,41 +2,40 @@ import { HTTP_STATUS_CODE } from "../../common/httpStatusCode";
 import { updateTask, dbTasks } from "./task.memory.repository";
 import { dbBoards } from "../boards/board.memory.repository";
 import { Task } from "./task.model";
-// import { checkRequestStructure } from '../../common/checkStructure';
 import { koaCtxType } from "../../common/types";
 
-// export function getBoardById(id: string) {
-//   return dbBoards.find((item) => item.id == id);
-// }
-
-// export function findTaskById(id: string) {
-//   return dbTasks.find((item) => item.id == id);
-// }
-
-//* OK
+/**
+ *
+ * function return to client Task with passed ctx.params.boardId and ctx.params.taskId if they're exist
+ * @param {koaCtxType} ctx
+ */
 export function getTask(ctx: koaCtxType) {
   const boardId = ctx["params"].boardId;
   let board = dbBoards.filter((board) => board.id === boardId)[0];
-
-  if (!board) {
-    ctx.body = JSON.stringify(`Not found board ${boardId}`);
-    ctx.status = HTTP_STATUS_CODE.Not_Found;
-    return;
-  }
-  const taskId = ctx["params"].taskId;
-  // const task = findTaskById(taskId);
-  let task = dbTasks.filter((task) => task.id === taskId)[0];
-  if (task) {
-    ctx.response.set("content-type", "application/json");
-    ctx.response.body = JSON.stringify(task);
-    ctx.status = HTTP_STATUS_CODE.OK;
+  if (board) {
+    const taskId = ctx["params"].taskId;
+    // const task = findTaskById(taskId);
+    let task = dbTasks.filter((task) => task.id === taskId)[0];
+    if (task) {
+      ctx.response.set("content-type", "application/json");
+      ctx.response.body = JSON.stringify(task);
+      ctx.status = HTTP_STATUS_CODE.OK;
+    } else {
+      ctx.body = JSON.stringify(`Not found task ${taskId}`);
+      ctx.status = HTTP_STATUS_CODE.Not_Found;
+    }
   } else {
-    ctx.body = JSON.stringify(`Not found task ${taskId}`);
+    ctx.body = JSON.stringify(`Not found board ${boardId}`);
     ctx.status = HTTP_STATUS_CODE.Not_Found;
   }
 }
 
-//* OK
+/**
+ *
+ * function return to client list of all tasks on board ctx.params.boardId if board exist
+ * @param {koaCtxType} ctx
+ */
+
 export function getTaskList(ctx: koaCtxType) {
   const boardId = ctx["params"].boardId;
   let board = dbBoards.filter((board) => board.id === boardId)[0];
@@ -50,7 +49,11 @@ export function getTaskList(ctx: koaCtxType) {
   ctx.body = JSON.stringify(dbTasks.filter((item) => item.boardId == boardId));
 }
 
-//* OK
+/**
+ *
+ * function add new task to memory repository
+ * @param {koaCtxType} ctx
+ */
 export function addTask(ctx: koaCtxType) {
   const boardId = ctx["params"].boardId;
   ctx.request.body.boardId = boardId;
@@ -73,7 +76,11 @@ export function addTask(ctx: koaCtxType) {
   }
 }
 
-//* OK
+/**
+ *
+ * function return to client updated task with id == ctx.params.taskId on board ctx.params.boardId if board exist
+ * @param {koaCtxType} ctx
+ */
 export function updTask(ctx: koaCtxType) {
   const taskId = ctx["params"].taskId;
   const boardId = ctx["params"].boardId;
@@ -84,10 +91,8 @@ export function updTask(ctx: koaCtxType) {
     return;
   }
 
-  // let task = findTaskById(taskId);
   let task = dbTasks.filter((task) => task.id === taskId)[0];
   if (task) {
-    //do not change boardID !!
     ctx.request.body.boardId = boardId;
     updateTask(taskId, ctx.request.body);
     ctx.set("content-type", "application/json");
@@ -100,9 +105,13 @@ export function updTask(ctx: koaCtxType) {
   }
 }
 
+/**
+ *
+ * function delete task witth id == ctx.params.taskId
+ * @param {koaCtxType} ctx
+ */
 export function delTask(ctx: koaCtxType) {
   const taskId = ctx["params"].taskId;
-  // let task = findTaskById(taskId);
   let task = dbTasks.filter((task) => task.id === taskId)[0];
   if (task) {
     dbTasks.splice(dbTasks.indexOf(task), 1);

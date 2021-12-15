@@ -1,5 +1,15 @@
-import { v4 as uuidv4 } from 'uuid';
-import { IBoard, IColumn } from '../../common/interfaces';
+import { v4 as uuidv4 } from "uuid";
+import { IBoard, IColumn } from "../../common/interfaces";
+
+/**
+ * Board class
+ * @class
+ *
+ * Constructor of class board.
+ * @constructor
+ * @typedef {{id:string, title:string, columns:Array<{title:string, order:number}>}}
+ * @param {object.<string, board>} object
+ */
 
 export class Board implements IBoard {
   id?: string | undefined;
@@ -7,10 +17,10 @@ export class Board implements IBoard {
   columns: IColumn[];
 
   constructor({
-    title = 'Autotest board',
+    title = "Autotest board",
     columns = [
-      { title: 'Backlog', order: 1 },
-      { title: 'Sprint', order: 2 },
+      { title: "Backlog", order: 1 },
+      { title: "Sprint", order: 2 },
     ],
   } = {}) {
     this.id = uuidv4();

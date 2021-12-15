@@ -1,5 +1,9 @@
-import { v4 as uuidv4 } from 'uuid';
-import { ITask } from '../../common/interfaces';
+import { v4 as uuidv4 } from "uuid";
+import { ITask } from "../../common/interfaces";
+
+/**
+ *
+ */
 
 export class Task implements ITask {
   id?: string;
@@ -12,9 +16,9 @@ export class Task implements ITask {
 
   constructor({
     id = uuidv4(),
-    title = 'Autotest task',
+    title = "Autotest task",
     order = 1,
-    description = '',
+    description = "",
     userId = null,
     boardId = null,
     columnId = null,

@@ -7,5 +7,7 @@
   "parserOptions": {
     "ecmaVersion": "es2021"
   },
-  "rules": {}
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "on"
+  }
 }
