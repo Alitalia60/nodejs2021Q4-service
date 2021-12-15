@@ -1,22 +1,17 @@
 import koaBody from 'koa-body';
 import Router from 'koa-router';
+import { dbUsers } from './user.memory.repository';
 
-import {
-  getUserById,
-  showUserList,
-  delUser,
-  addUser,
-  updUser,
-} from './user.service';
+import { getUserById, delUser, addUser, updUser } from './user.service';
 
-const userRouter = new Router();
+export const userRouter = new Router();
 
 //Users---------------------------------
 //* OK 1.  GET /users - get all users (remove password from response)
 userRouter.get('/users', async (ctx) => {
   // ctx.set('Content-type', 'application/json');
   ctx.response.set('Content-type', 'application/json');
-  ctx.body = JSON.stringify(showUserList());
+  ctx.body = JSON.stringify(dbUsers);
 });
 
 //* OK GET /users/:userId - get the user by id (ex. “/users/123”) (remove password from response)

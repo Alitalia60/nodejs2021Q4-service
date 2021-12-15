@@ -2,10 +2,10 @@ import { v4 as uuidv4 } from 'uuid';
 import { IUser } from '../../common/interfaces';
 
 export class User implements IUser {
-  id?: string;
-  name: string;
-  login: string;
-  password?: string;
+  id;
+  name;
+  login;
+  password;
 
   constructor({
     id = uuidv4(),

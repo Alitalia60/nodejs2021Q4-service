@@ -1,14 +1,8 @@
 import koaBody from 'koa-body';
 import Router from 'koa-router';
 
-import {
-  getBoard,
-  getBoardList,
-  addBoard,
-  updBoard,
-  delBoard,
-} from './board.service.ts';
-
+import { getBoard, addBoard, updBoard, delBoard } from './board.service';
+import { getBoardList } from './board.memory.repository';
 export const boardRouter = new Router();
 
 //Boards-------------------------------
