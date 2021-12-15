@@ -9,7 +9,13 @@
 
 git clone {repository URL}
 
+## if task is "REST API service"
+
 git checkout task4
+
+## if task is "typescript-basic"
+
+git checkout task5
 
 ### Installing NPM modules
 
