@@ -3,6 +3,7 @@ import { boardRouter } from "./resources/boards/board.router";
 import { userRouter } from "./resources/users/user.router";
 import { taskRouter } from "./resources/tasks/task.router";
 import dotenv from "dotenv";
+import koaBody from "koa-body";
 
 const envParsed = dotenv.config().parsed;
 let HOST: string = "localhost";

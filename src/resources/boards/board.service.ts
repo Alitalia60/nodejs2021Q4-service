@@ -2,16 +2,15 @@ import { Board } from "./board.model";
 import { dbBoards, updateBoard } from "./board.memory.repository";
 import { deleteColumnsOfBoardId } from "../columns/column.memory.repository";
 import { deleteTasksOfBoardId } from "../tasks/task.memory.repository";
-import { koaCtxType } from "../../common/types";
+import { koaContext } from "../../common/types";
 import { HTTP_STATUS_CODE } from "../../common/httpStatusCode";
 
 /**
+ * fill response data of board with boardId, if exist
  *
- * function return response BOARD with passed boardId, if exist
- * @param {koaCtxType} ctx
+ * @param {koaContext} ctx  - koa context
  */
-
-export function getBoard(ctx: koaCtxType): void {
+export function getBoard(ctx: koaContext): void {
   let boardId = ctx["params"].boardId;
   let board = dbBoards.filter((board) => board.id === boardId)[0];
   if (board) {
@@ -25,12 +24,11 @@ export function getBoard(ctx: koaCtxType): void {
 }
 
 /**
+ * add new BOARD to memory repository dbBoard
  *
- * function add new BOARD to memory repository dbBoard
- * @param {koaCtxType} ctx
+ * @param {koaContext} ctx  - koa context
  */
-
-export function addBoard(ctx: koaCtxType) {
+export function addBoard(ctx: koaContext) {
   try {
     const newBoard = new Board(ctx.request.body);
     dbBoards.push(newBoard);
@@ -44,12 +42,11 @@ export function addBoard(ctx: koaCtxType) {
 }
 
 /**
+ * fill updated data to response with id == ctx.params.boardId
  *
- * function return to client updated BOARD with id == ctx.params.boardId
- * @param {koaCtxType} ctx
+ * @param {koaContext} ctx  - koa context
  */
-
-export function updBoard(ctx: koaCtxType) {
+export function updBoard(ctx: koaContext) {
   let boardId = ctx["params"].boardId;
   let board = dbBoards.filter((board) => board.id === boardId)[0];
   if (board) {
@@ -66,11 +63,12 @@ export function updBoard(ctx: koaCtxType) {
 }
 
 /**
+ * delete board with id == ctx.params.boardId from memory repository dbBoard
+ *fill data respons
  *
- * function delete BOARD  with id == ctx.params.boardId from memory repository dbBoard
- * @param {koaCtxType} ctx
+ * @param {koaContext} ctx  - koa context
  */
-export function delBoard(ctx: koaCtxType) {
+export function delBoard(ctx: koaContext) {
   let boardId: string = ctx["params"].boardId;
   let board = dbBoards.filter((board) => board.id === boardId)[0];
   if (board) {

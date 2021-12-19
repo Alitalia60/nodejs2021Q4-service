@@ -1,8 +1,13 @@
-import { IBoard, IColumn } from '../../common/interfaces';
-import { findBoardAsObjectById } from '../boards/board.memory.repository';
+import { IBoard, IColumn } from "../../common/interfaces";
+import { findBoardAsObjectById } from "../boards/board.memory.repository";
 export let dbColumns: IColumn[] = [];
 
-//deleting all columns if exist on board id
+//deleting
+/**
+ *delete all columns if exist on board.id == boardId
+ *
+ * @param columnId
+ */
 export function deleteColumnsOfBoardId(boardId: string): void {
   let board: IBoard | undefined = findBoardAsObjectById(boardId);
   if (board) {

@@ -1,3 +1,4 @@
+import koaBody from "koa-body";
 import { dbUsers, updateUser } from "./user.memory.repository";
 import {
   dbTasks,
@@ -5,14 +6,15 @@ import {
 } from "../tasks/task.memory.repository";
 import { User } from "./user.model";
 import { HTTP_STATUS_CODE } from "../../common/httpStatusCode";
-import { koaCtxType } from "../../common/types";
+import { koaContext } from "../../common/types";
 
 /**
  *
- * function return response to client USER with passed userId
- * @param {koaCtxType} ctx
+ * fill response to client USER with passed userId
+ *
+ *  @param {koaContext} ctx - koa context
  */
-export function getUserById(ctx: koaCtxType) {
+export function getUserById(ctx: koaContext) {
   let userId = ctx["params"].userId;
   let user = dbUsers.filter((user) => user.id === userId)[0];
   if (user) {
@@ -26,13 +28,11 @@ export function getUserById(ctx: koaCtxType) {
 }
 
 /**
+ * fill data of new user, add to memory repository dbUser, fill response data
  *
- * function add new USER to memory repository dbUser
- * @param {koaCtxType} ctx
+ *  @param {koaContext} ctx - koa context
  */
-export function addUser(ctx: koaCtxType) {
-  exports.delUser = delUser;
-
+export function addUser(ctx: koaContext) {
   try {
     const newUser = new User(ctx.request.body);
     dbUsers.push(newUser);
@@ -47,11 +47,11 @@ export function addUser(ctx: koaCtxType) {
 }
 
 /**
+ * update user data it in memory repository, fill response to client
  *
- * function return to client updated USER with id == ctx.params.userId
- * @param {koaCtxType} ctx
+ *  @param {koaContext} ctx - koa context
  */
-export function updUser(ctx: koaCtxType) {
+export function updUser(ctx: koaContext) {
   let userId = ctx["params"].userId;
   let user = dbUsers.filter((user) => user.id === userId)[0];
   if (user) {
@@ -67,11 +67,11 @@ export function updUser(ctx: koaCtxType) {
 }
 
 /**
+ * delete USER with id == ctx.params.userId from memory repository
  *
- * function delete USER  with id == ctx.params.userId from memory repository
- * @param {koaCtxType} ctx
+ *  @param {koaContext} ctx - koa context
  */
-export function delUser(ctx: koaCtxType) {
+export function delUser(ctx: koaContext) {
   let userId = ctx["params"].userId;
   let user = dbUsers.filter((user) => user.id === userId)[0];
   if (user) {

@@ -1,2 +1,2 @@
 import * as koa from "koa";
-export type koaCtxType = koa.Context;
+export type koaContext = koa.Context;

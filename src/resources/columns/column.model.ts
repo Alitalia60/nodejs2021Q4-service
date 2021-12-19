@@ -1,8 +1,18 @@
 import { v4 as uuidv4 } from "uuid";
 import { IColumn } from "../../common/interfaces";
 
+/**
+ * Column class
+ * @class
+ *
+ * Constructor of class Column.
+ * @constructor
+ * @typedef {{id:string, title:string, order:number}}
+ * @param {object.<string, column>} object
+ */
+
 module.exports = class Column implements IColumn {
-  id?: string | undefined;
+  id?: string;
   title: string;
   order: number;
 

@@ -2,14 +2,14 @@ import { HTTP_STATUS_CODE } from "../../common/httpStatusCode";
 import { updateTask, dbTasks } from "./task.memory.repository";
 import { dbBoards } from "../boards/board.memory.repository";
 import { Task } from "./task.model";
-import { koaCtxType } from "../../common/types";
+import { koaContext } from "../../common/types";
 
 /**
  *
  * function return to client Task with passed ctx.params.boardId and ctx.params.taskId if they're exist
- * @param {koaCtxType} ctx
+ * @param {koaContext} ctx
  */
-export function getTask(ctx: koaCtxType) {
+export function getTask(ctx: koaContext) {
   const boardId = ctx["params"].boardId;
   let board = dbBoards.filter((board) => board.id === boardId)[0];
   if (board) {
@@ -33,10 +33,9 @@ export function getTask(ctx: koaCtxType) {
 /**
  *
  * function return to client list of all tasks on board ctx.params.boardId if board exist
- * @param {koaCtxType} ctx
+ * @param {koaContext} ctx
  */
-
-export function getTaskList(ctx: koaCtxType) {
+export function getTaskList(ctx: koaContext) {
   const boardId = ctx["params"].boardId;
   let board = dbBoards.filter((board) => board.id === boardId)[0];
   if (!board) {
@@ -52,9 +51,9 @@ export function getTaskList(ctx: koaCtxType) {
 /**
  *
  * function add new task to memory repository
- * @param {koaCtxType} ctx
+ * @param {koaContext} ctx
  */
-export function addTask(ctx: koaCtxType) {
+export function addTask(ctx: koaContext) {
   const boardId = ctx["params"].boardId;
   ctx.request.body.boardId = boardId;
   try {
@@ -79,9 +78,9 @@ export function addTask(ctx: koaCtxType) {
 /**
  *
  * function return to client updated task with id == ctx.params.taskId on board ctx.params.boardId if board exist
- * @param {koaCtxType} ctx
+ * @param {koaContext} ctx
  */
-export function updTask(ctx: koaCtxType) {
+export function updTask(ctx: koaContext) {
   const taskId = ctx["params"].taskId;
   const boardId = ctx["params"].boardId;
   let board = dbBoards.filter((board) => board.id === boardId)[0];
@@ -108,9 +107,9 @@ export function updTask(ctx: koaCtxType) {
 /**
  *
  * function delete task witth id == ctx.params.taskId
- * @param {koaCtxType} ctx
+ * @param {koaContext} ctx
  */
-export function delTask(ctx: koaCtxType) {
+export function delTask(ctx: koaContext) {
   const taskId = ctx["params"].taskId;
   let task = dbTasks.filter((task) => task.id === taskId)[0];
   if (task) {
