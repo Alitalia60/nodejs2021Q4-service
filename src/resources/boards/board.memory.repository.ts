@@ -19,6 +19,11 @@ export function findBoardAsObjectById(id: string): IBoard | undefined {
   return dbBoards.find((item) => item.id == id);
 }
 
+/**
+ * fill response data with all items of board
+ *
+ * @param ctx - koa context
+ */
 export function getBoardList(ctx: koaContext): void {
   ctx.response.status = HTTP_STATUS_CODE.OK;
   ctx.response.set("Content-type", "application/json");
