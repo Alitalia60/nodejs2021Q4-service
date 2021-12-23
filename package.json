@@ -9,7 +9,7 @@
   "description": "REST service on Typescript (TASK 5)",
   "main": "dist/src/app.js",
   "scripts": {
-    "start:dev": "tsc && nodemon dist/src/app.js",
+    "start:dev": "tsc && node dist/src/app.js",
     "start:prod": "webpack --mode=production && nodemon ./dist/main.js",
     "lint": "eslint --ext .ts --fix src/",
     "test": "cross-env DEBUG=rs:* jest --testMatch \"<rootDir>/test/e2e/test/*.test.js\" --noStackTrace --runInBand",

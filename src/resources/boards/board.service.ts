@@ -4,6 +4,7 @@ import { deleteColumnsOfBoardId } from "../columns/column.memory.repository";
 import { deleteTasksOfBoardId } from "../tasks/task.memory.repository";
 import { koaContext } from "../../common/types";
 import { HTTP_STATUS_CODE } from "../../common/httpStatusCode";
+import writeLog from "../../common/loggers";
 
 /**
  * fill response data of board with boardId, if exist
@@ -35,6 +36,7 @@ export function addBoard(ctx: koaContext) {
     ctx.response.status = HTTP_STATUS_CODE.Created;
     ctx.response.set("Content-type", "application/json");
     ctx.response.body = JSON.stringify(newBoard);
+    // writeLog(`${ctx.response.status} ${ctx.message}` )
   } catch (error) {
     ctx.body = JSON.stringify(`error creating Board`);
     ctx.status = HTTP_STATUS_CODE.Server_Error;

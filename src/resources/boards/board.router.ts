@@ -5,12 +5,11 @@ import { getBoard, addBoard, updBoard, delBoard } from "./board.service";
 import { getBoardList } from "./board.memory.repository";
 import { koaContext } from "../../common/types";
 
-import logger from '../../common/logger'
+import writeLog from '../../common/loggers'
 
 export const boardRouter = new Router();
 
 boardRouter.get("/boards", async (ctx: koaContext) => {
-  logger.info('GET logger')
   getBoardList(ctx);
 });
 
@@ -29,3 +28,4 @@ boardRouter.put("/boards/:boardId", koaBody(), async (ctx: koaContext) => {
 boardRouter.del("/boards/:boardId", async (ctx: koaContext) => {
   delBoard(ctx);
 });
+
