@@ -1,0 +1,65 @@
+{
+  "root": true,
+  "env": {
+    "commonjs": true,
+    "es2020": true,
+    "node": true,
+    "jasmine": true,
+    "jest": true
+  },
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": "es2021",
+    "project": "tsconfig.json",
+    "ecmaFeatures": {
+      "impliedStrict": true
+    }
+  },
+  "parser": "@typescript-eslint/parser",
+  "overrides": [
+    {
+      "files": [
+        "*.ts"
+      ], // Your TypeScript files extension
+      "parserOptions": {
+        "project": [
+          "./tsconfig.json"
+        ] // Specify it only for TypeScript files
+      }
+    }
+  ],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": 2
+  },
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [
+        ".ts"
+      ]
+    },
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true,
+        "project": "./"
+      },
+      "node": {
+        "paths": [
+          "./src"
+        ],
+        "resolvePaths": [
+          "node_modules/@types"
+        ],
+        "extensions": [
+          ".js",
+          ".json",
+          ".ts"
+        ]
+      }
+    }
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "import",
+    "eslint-plugin-tsdoc"
+  ]
+}
