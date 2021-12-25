@@ -48,11 +48,13 @@
     "@microsoft/tsdoc": "^0.13.2",
     "@types/koa": "^2.13.4",
     "@types/pino": "^7.0.5",
+    "@types/pino-pretty": "^4.7.4",
     "cross-env": "7.0.3",
     "dotenv": "10.0.0",
     "koa": "^2.13.4",
     "koa-body": "^4.2.0",
     "koa-router": "^10.1.1",
+    "moment": "^2.29.1",
     "pino": "^7.6.1",
     "pino-pretty": "^7.3.0",
     "uuid": "8.3.2"

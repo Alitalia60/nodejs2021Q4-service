@@ -4,10 +4,10 @@ import { userRouter } from "./resources/users/user.router";
 import { taskRouter } from "./resources/tasks/task.router";
 import dotenv from "dotenv";
 import koaBody from "koa-body";
-import logger from "./common/loggers";
-import writeLog from "./common/loggers";
+// import { writeReasponseLog, writeRequestLog } from "./common/loggers";
 import { koaContext } from "./common/types";
 import { HTTP_STATUS_CODE } from "./common/httpStatusCode";
+import { myReqLogger, myResLogger } from "./common/loggers";
 
 const envParsed = dotenv.config().parsed;
 let HOST: string = "localhost";
@@ -33,22 +33,20 @@ app.listen(PORT, () => {
 });
 
 app.use(async (ctx: koaContext, next) => {
-  let msg = `<- ${ctx.req.method} ${ctx.originalUrl} ${JSON.stringify(ctx.request.body)}`
-  // console.log(msg);
-
-  writeLog(msg)
   if (new Array('GET', 'POST', 'PUT', 'DELETE').indexOf(ctx.method) < 0) {
-    msg = `-> ${HTTP_STATUS_CODE.Method_Not_Allowed} Method not alowed`
-    writeLog(msg, 'warn')
+    let msg = `-> ${HTTP_STATUS_CODE.Method_Not_Allowed} Method not alowed`
+    // writeReasponseLog(msg, 'warn')
+    myResLogger(msg, 'error')
     ctx.response.status = HTTP_STATUS_CODE.Method_Not_Allowed
     return
   }
   else {
-    await next()
-    msg = `-> ${ctx.res.statusCode} ${ctx.response.message}`
-    // console.log(msg);
 
-    writeLog(msg)
+    myReqLogger(ctx)
+    await next()
+    myResLogger(ctx)
+
+    // writeReasponseLog(ctx)
   }
 
 })
@@ -62,6 +60,6 @@ app.use(taskRouter.routes());
 app.use(taskRouter.allowedMethods());
 
 app.on('error', (err, ctx) => {
-  writeLog(`-> ${err.status} status code=${err}`, 'error')
+  myResLogger(`-> ${err.status} status code=${err}`)
 });
 

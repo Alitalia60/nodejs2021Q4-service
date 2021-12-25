@@ -4,7 +4,6 @@ import { deleteColumnsOfBoardId } from "../columns/column.memory.repository";
 import { deleteTasksOfBoardId } from "../tasks/task.memory.repository";
 import { koaContext } from "../../common/types";
 import { HTTP_STATUS_CODE } from "../../common/httpStatusCode";
-import writeLog from "../../common/loggers";
 
 /**
  * fill response data of board with boardId, if exist

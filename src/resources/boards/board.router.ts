@@ -4,8 +4,6 @@ import { getBoard, addBoard, updBoard, delBoard } from "./board.service";
 import { getBoardList } from "./board.memory.repository";
 import { koaContext } from "../../common/types";
 
-import writeLog from '../../common/loggers'
-
 export const boardRouter = new Router();
 
 boardRouter.get("/boards", async (ctx: koaContext) => {
