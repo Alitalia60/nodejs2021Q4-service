@@ -1,4 +1,3 @@
-import koaBody from "koa-body";
 import Router from "koa-router";
 import { dbUsers } from "./user.memory.repository";
 import { koaContext } from "../../common/types";
@@ -11,16 +10,17 @@ userRouter.get("/users", async (ctx: koaContext) => {
   ctx.body = JSON.stringify(dbUsers);
 });
 
-userRouter.get("/users/:userId", koaBody(), async (ctx: koaContext) => {
+userRouter.get("/users/:userId", async (ctx: koaContext) => {
   ctx.set("Content-type", "application/json");
   getUserById(ctx);
 });
 
-userRouter.post("/users", koaBody(), async (ctx: koaContext) => {
+// userRouter.post("/users", async (ctx: koaContext) => {
+userRouter.post("/users", async (ctx: koaContext) => {
   addUser(ctx);
 });
 
-userRouter.put("/users/:userId", koaBody(), async (ctx: koaContext) => {
+userRouter.put("/users/:userId", async (ctx: koaContext) => {
   updUser(ctx);
 });
 

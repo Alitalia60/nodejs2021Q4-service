@@ -25,24 +25,30 @@ if (envParsed) {
   }
 }
 const app = new Koa();
+
+app.use(koaBody())
 app.listen(PORT, () => {
   console.log("==============================================");
   console.log(`Srerver is running on http://${HOST}:${PORT}`);
 });
 
-app.use(async(ctx:koaContext,next)=>{
-  let msg = `<- ${ctx.req.method} ${ctx.originalUrl}`
-  writeLog(msg )
-  if (new Array('GET', 'POST','PUT','DELETE').indexOf(ctx.method) < 0) {
-    msg =  `-> ${HTTP_STATUS_CODE.Method_Not_Allowed} Method not alowed`
+app.use(async (ctx: koaContext, next) => {
+  let msg = `<- ${ctx.req.method} ${ctx.originalUrl} ${JSON.stringify(ctx.request.body)}`
+  // console.log(msg);
+
+  writeLog(msg)
+  if (new Array('GET', 'POST', 'PUT', 'DELETE').indexOf(ctx.method) < 0) {
+    msg = `-> ${HTTP_STATUS_CODE.Method_Not_Allowed} Method not alowed`
     writeLog(msg, 'warn')
     ctx.response.status = HTTP_STATUS_CODE.Method_Not_Allowed
     return
   }
-  else{
+  else {
     await next()
-    msg =  `-> ${ctx.res.statusCode} ${ctx.response.message}`
-    writeLog(msg )
+    msg = `-> ${ctx.res.statusCode} ${ctx.response.message}`
+    // console.log(msg);
+
+    writeLog(msg)
   }
 
 })

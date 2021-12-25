@@ -1,4 +1,3 @@
-import koaBody from "koa-body";
 import Router from "koa-router";
 
 import { getBoard, addBoard, updBoard, delBoard } from "./board.service";
@@ -13,15 +12,15 @@ boardRouter.get("/boards", async (ctx: koaContext) => {
   getBoardList(ctx);
 });
 
-boardRouter.get("/boards/:boardId", koaBody(), async (ctx: koaContext) => {
+boardRouter.get("/boards/:boardId", async (ctx: koaContext) => {
   getBoard(ctx);
 });
 
-boardRouter.post("/boards", koaBody(), async (ctx: koaContext) => {
+boardRouter.post("/boards", async (ctx: koaContext) => {
   addBoard(ctx);
 });
 
-boardRouter.put("/boards/:boardId", koaBody(), async (ctx: koaContext) => {
+boardRouter.put("/boards/:boardId", async (ctx: koaContext) => {
   updBoard(ctx);
 });
 
