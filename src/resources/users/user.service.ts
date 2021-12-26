@@ -6,6 +6,9 @@ import {
 import { User } from "./user.model";
 import { HTTP_STATUS_CODE } from "../../common/httpStatusCode";
 import { koaContext } from "../../common/types";
+import { IUser } from "../../common/interfaces";
+import { validateBody } from "../../common/validator";
+import { logger } from "../../common/logger";
 
 /**
  *
@@ -19,10 +22,12 @@ export function getUserById(ctx: koaContext) {
   if (user) {
     delete user["password"];
     ctx.body = JSON.stringify(user);
-    ctx.status = HTTP_STATUS_CODE.OK;
+    ctx.response.status = HTTP_STATUS_CODE.OK;
+    logger(ctx)
   } else {
     ctx.body = JSON.stringify(`not found user ${userId}`);
     ctx.status = HTTP_STATUS_CODE.Not_Found;
+    logger(ctx, 'warn')
   }
 }
 
@@ -32,16 +37,25 @@ export function getUserById(ctx: koaContext) {
  *  @param {koaContext} ctx - koa context
  */
 export function addUser(ctx: koaContext) {
-  try {
-    const newUser = new User(ctx.request.body);
-    dbUsers.push(newUser);
-    ctx.response.status = HTTP_STATUS_CODE.Created;
-    ctx.set("Content-type", "application/json");
-    delete newUser["password"];
-    ctx.response.body = JSON.stringify(newUser);
-  } catch (error) {
-    ctx["responce"].body = JSON.stringify(`error creating User`);
-    ctx.status = HTTP_STATUS_CODE.Server_Error;
+  if (validateBody(ctx, new User)) {
+    try {
+      const newUser = new User(ctx.request.body);
+      dbUsers.push(newUser);
+      ctx.response.status = HTTP_STATUS_CODE.Created;
+      ctx.set("Content-type", "application/json");
+      delete newUser["password"];
+      ctx.response.body = JSON.stringify(newUser);
+      logger(ctx)
+    } catch (error) {
+      ctx["response"].body = JSON.stringify(`error creating User`);
+      ctx.response.status = HTTP_STATUS_CODE.Server_Error;
+      logger(ctx, 'error')
+    }
+  }
+  else {
+    ctx.response.body = JSON.stringify(`wrong request data`);
+    ctx.response.status = HTTP_STATUS_CODE.Bad_Request;
+    logger(ctx, 'warn')
   }
 }
 
@@ -51,17 +65,28 @@ export function addUser(ctx: koaContext) {
  *  @param {koaContext} ctx - koa context
  */
 export function updUser(ctx: koaContext) {
-  let userId = ctx["params"].userId;
-  let user = dbUsers.filter((user) => user.id === userId)[0];
-  if (user) {
-    updateUser(userId, ctx.request.body);
-    delete user["password"];
-    ctx.response.set("Content-type", "application/json");
-    ctx.response.body = JSON.stringify(user);
-    ctx.response.status = HTTP_STATUS_CODE.OK;
-  } else {
-    ctx.body = JSON.stringify(`not found user ${userId}`);
-    ctx.status = HTTP_STATUS_CODE.Not_Found;
+
+  if (validateBody(ctx, new User)) {
+    let userId = ctx["params"].userId;
+    let user = dbUsers.filter((user) => user.id === userId)[0];
+    if (user) {
+      updateUser(userId, ctx.request.body);
+      delete user["password"];
+      ctx.response.set("Content-type", "application/json");
+      ctx.response.body = JSON.stringify(user);
+      ctx.response.status = HTTP_STATUS_CODE.OK;
+      logger(ctx)
+    } else {
+      ctx.body = JSON.stringify(`not found user ${userId}`);
+      ctx.status = HTTP_STATUS_CODE.Not_Found;
+      logger(ctx, 'warn')
+    }
+  }
+  else {
+    // logger(`wrong request data`, 'warn');
+    ctx["response"].body = JSON.stringify(`wrong request data`);
+    ctx.status = HTTP_STATUS_CODE.Bad_Request;
+    logger(ctx, 'warn')
   }
 }
 
@@ -86,7 +111,9 @@ export function delUser(ctx: koaContext) {
     ctx.body = `deleted users id = ${userId}`;
     ctx.response.status = HTTP_STATUS_CODE.No_Content;
     ctx.response.set("Content-type", "application/json");
+    logger(ctx.response.message, 'info')
   } else {
+    logger(ctx.response.message, 'warn')
     ctx.body = JSON.stringify(`not found user ${userId}`);
     ctx.response.status = HTTP_STATUS_CODE.Not_Found;
   }

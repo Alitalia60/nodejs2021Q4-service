@@ -9,7 +9,8 @@
   "description": "REST service on Typescript (TASK 5)",
   "main": "dist/src/app.js",
   "scripts": {
-    "start:dev": "tsc && node dist/src/app.js",
+    "build": "tsc",
+    "start": "npm run build && node dist/src/app.js",
     "start:prod": "webpack --mode=production && nodemon ./dist/main.js",
     "lint": "eslint --ext .ts --fix src/",
     "test": "cross-env DEBUG=rs:* jest --testMatch \"<rootDir>/test/e2e/test/*.test.js\" --noStackTrace --runInBand",
@@ -47,16 +48,12 @@
   "dependencies": {
     "@microsoft/tsdoc": "^0.13.2",
     "@types/koa": "^2.13.4",
-    "@types/pino": "^7.0.5",
-    "@types/pino-pretty": "^4.7.4",
     "cross-env": "7.0.3",
     "dotenv": "10.0.0",
     "koa": "^2.13.4",
     "koa-body": "^4.2.0",
     "koa-router": "^10.1.1",
     "moment": "^2.29.1",
-    "pino": "^7.6.1",
-    "pino-pretty": "^7.3.0",
     "uuid": "8.3.2"
   },
   "devDependencies": {
