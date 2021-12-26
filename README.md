@@ -46,6 +46,7 @@ For more information about OpenAPI/Swagger please visit https://swagger.io/.
 
 To use logging set environment:
 
+* create folder dist/log
 * LOG_STDOUT = true  - enable loggin to stdout
 * LOG_FILE = true    - enable loggin to file 'dist/src/trace.log'
 * LOG_LEVEL = info   - level of loggin 
