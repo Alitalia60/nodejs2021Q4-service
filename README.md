@@ -17,11 +17,19 @@ git checkout task4
 
 git checkout task5
 
+## if task is "typescript-basic-logger"
+
+git checkout task6
+
 ### Installing NPM modules
 
 npm install
 
-### Running application in development mode
+### Building application
+
+npm run build
+
+### Building & Running application in development mode
 
 npm run start:dev
 
@@ -32,6 +40,16 @@ npm run start:prod
 After starting the app on port (4000 as default) you can open
 in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
 For more information about OpenAPI/Swagger please visit https://swagger.io/.
+
+
+*** WARNING ***
+
+To use logging set environment:
+
+* create folder dist/log
+* LOG_STDOUT = true  - enable loggin to stdout
+* LOG_FILE = true    - enable loggin to file 'dist/src/trace.log'
+* LOG_LEVEL = info   - level of loggin 
 
 ### Testing
 

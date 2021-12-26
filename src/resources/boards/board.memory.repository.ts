@@ -1,5 +1,3 @@
-// import { ParameterizedContext } from 'koa';
-// import { IRouterParamContext } from 'koa-router';
 import { HTTP_STATUS_CODE } from "../../common/httpStatusCode";
 import { IBoard } from "../../common/interfaces";
 import { koaContext } from "../../common/types";
@@ -43,3 +41,4 @@ export function updateBoard(boardId: string, ctxBody: IBoard): void {
     board.columns = ctxBody.columns;
   }
 }
+

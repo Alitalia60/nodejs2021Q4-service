@@ -8,10 +8,10 @@ export let dbColumns: IColumn[] = [];
  *
  * @param columnId
  */
-export function deleteColumnsOfBoardId(boardId: string): void {
+export function  deleteColumnsOfBoardId(boardId: string) {
   let board: IBoard | undefined = findBoardAsObjectById(boardId);
+  dbColumns = dbColumns.filter((item) => item.id != boardId);
   if (board) {
     board.columns = board.columns.filter((item) => item.id != boardId);
-    dbColumns = dbColumns.filter((item) => item.id != boardId);
   }
 }
